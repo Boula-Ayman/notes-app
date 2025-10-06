@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Edit2 } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
@@ -29,6 +29,7 @@ export default function ProfilePage() {
     (async () => {
       setLoading(true);
       setError(null);
+      const supabase = getSupabaseClient();
       const { data: userData, error: getUserError } =
         await supabase.auth.getUser();
       if (!isMounted) return;
@@ -55,6 +56,7 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setSaving(true);
     setError(null);
+    const supabase = getSupabaseClient();
     const { error: updateError } = await supabase.auth.updateUser({
       data: { full_name: name },
     });

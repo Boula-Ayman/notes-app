@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Search, Moon, Sun, User, Settings, LogOut } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
-import { supabase } from "@/lib/supabaseClient";
+import { getSupabaseClient } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export function DashboardNavbar() {
@@ -27,6 +27,7 @@ export function DashboardNavbar() {
   useEffect(() => {
     let isMounted = true;
     (async () => {
+      const supabase = getSupabaseClient();
       const { data } = await supabase.auth.getUser();
       if (!isMounted) return;
       const user = data.user;
@@ -44,6 +45,7 @@ export function DashboardNavbar() {
   }, []);
 
   const handleLogout = async () => {
+    const supabase = getSupabaseClient();
     await supabase.auth.signOut();
     router.replace("/login");
   };

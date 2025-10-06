@@ -17,7 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StickyNote } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -29,6 +29,7 @@ export default function LoginPage() {
   const resendConfirmation = async () => {
     setIsResending(true);
     try {
+      const supabase = getSupabaseClient();
       const { error } = await supabase.auth.resend({
         type: "signup",
         email: email,
@@ -55,6 +56,7 @@ export default function LoginPage() {
     }
 
     try {
+      const supabase = getSupabaseClient();
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
