@@ -157,16 +157,15 @@ export default function NotesPage() {
           </span>
         </h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {!loading &&
-            unpinnedNotes.map((note) => (
-              <NoteCard
-                key={note.id}
-                note={note}
-                onEdit={handleEditNote}
-                onDelete={handleDeleteNote}
-                onTogglePin={handleTogglePin}
-              />
-            ))}
+          {unpinnedNotes.map((note) => (
+            <NoteCard
+              key={note.id}
+              note={note}
+              onEdit={handleEditNote}
+              onDelete={handleDeleteNote}
+              onTogglePin={handleTogglePin}
+            />
+          ))}
         </div>
       </div>
 

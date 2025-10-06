@@ -41,72 +41,46 @@ export function NoteCard({
   onDelete,
   onTogglePin,
 }: NoteCardProps) {
-  const stripeStyle: React.CSSProperties = {
-    width: 6,
-    backgroundColor: note.color?.startsWith("#")
-      ? note.color
-      : note.color
-      ? `hsl(var(--${note.color}))`
-      : `hsl(var(--primary))`,
-  };
-
   return (
-    <Card className="border-border/50 hover:border-border transition-colors group relative overflow-hidden">
-      {/* Left color stripe (uses theme tokens or hex) */}
-      <div
-        aria-hidden
-        className="absolute left-0 top-0 h-full"
-        style={stripeStyle}
-      />
+    <Card
+      className="border-border/50 hover:border-border transition-colors group"
+      style={{ backgroundColor: note.color || undefined }}
+    >
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-lg text-balance line-clamp-1 text-black">
             {note.title}
           </h3>
         </div>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-destructive"
-            onClick={() => onDelete(note.id)}
-            aria-label="Delete note"
-            title="Delete"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-gray-900"
-                aria-label="More actions"
-                title="More"
-              >
-                <MoreVertical className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onTogglePin(note.id)}>
-                <Pin className="mr-2 h-4 w-4" />
-                {note.isPinned ? "Unpin" : "Pin"}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onEdit(note)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => onDelete(note.id)}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <MoreVertical className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => onTogglePin(note.id)}>
+              <Pin className="mr-2 h-4 w-4" />
+              {note.isPinned ? "Unpin" : "Pin"}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEdit(note)}>
+              <Edit className="mr-2 h-4 w-4" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => onDelete(note.id)}
+              className="text-destructive focus:text-destructive"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </CardHeader>
       <CardContent className="pb-3">
         <p className="text-sm line-clamp-3 leading-relaxed text-black/90">
