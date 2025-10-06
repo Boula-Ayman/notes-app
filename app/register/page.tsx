@@ -31,7 +31,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    // Validation
+    // Validation fields are not empty
     if (!name || !email || !password || !confirmPassword) {
       setError("Please fill in all fields");
       return;
