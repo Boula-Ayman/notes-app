@@ -41,13 +41,22 @@ export function NoteCard({
   onDelete,
   onTogglePin,
 }: NoteCardProps) {
+  const stripeStyle: React.CSSProperties = {
+    width: 6,
+    backgroundColor: note.color?.startsWith("#")
+      ? note.color
+      : note.color
+      ? `hsl(var(--${note.color}))`
+      : `hsl(var(--primary))`,
+  };
+
   return (
     <Card className="border-border/50 hover:border-border transition-colors group relative overflow-hidden">
-      {/* Left color stripe */}
+      {/* Left color stripe (uses theme tokens or hex) */}
       <div
         aria-hidden
         className="absolute left-0 top-0 h-full"
-        style={{ width: 6, backgroundColor: note.color || "#FDE68A" }}
+        style={stripeStyle}
       />
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
         <div className="flex-1 min-w-0">

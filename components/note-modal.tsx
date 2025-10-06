@@ -141,28 +141,40 @@ export function NoteModal({ isOpen, onClose, onSave, note }: NoteModalProps) {
                 <input
                   id="color"
                   type="color"
-                  value={color}
+                  value={
+                    color.startsWith("#")
+                      ? color
+                      : getComputedStyle(document.documentElement)
+                          .getPropertyValue(`--${color}`)
+                          .trim() || "#FDE68A"
+                  }
                   onChange={(e) => setColor(e.target.value)}
                   className="h-9 w-14 p-1 rounded-md border border-border/50 bg-secondary/50 cursor-pointer"
                 />
-                <div className="flex gap-2">
-                  {[
-                    "#FDE68A",
-                    "#BFDBFE",
-                    "#FCA5A5",
-                    "#C7D2FE",
-                    "#A7F3D0",
-                    "#FECACA",
-                  ].map((preset) => (
-                    <button
-                      key={preset}
-                      type="button"
-                      onClick={() => setColor(preset)}
-                      className="h-6 w-6 rounded-full border border-border/50"
-                      style={{ backgroundColor: preset }}
-                      aria-label={`Select ${preset}`}
-                    />
-                  ))}
+                <div className="flex gap-2 items-center">
+                  {["primary", "secondary", "accent", "destructive"].map(
+                    (token) => (
+                      <button
+                        key={token}
+                        type="button"
+                        onClick={() => setColor(token)}
+                        className="h-6 w-6 rounded-full border border-border/50"
+                        style={{ backgroundColor: `hsl(var(--${token}))` }}
+                        aria-label={`Select ${token}`}
+                        title={token}
+                      />
+                    )
+                  )}
+                  {/* Live preview chip */}
+                  <span
+                    className="ml-2 h-6 w-6 rounded-full border border-border/50"
+                    style={{
+                      backgroundColor: color.startsWith("#")
+                        ? color
+                        : `hsl(var(--${color}))`,
+                    }}
+                    aria-hidden
+                  />
                 </div>
               </div>
             </div>
