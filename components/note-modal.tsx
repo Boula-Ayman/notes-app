@@ -63,12 +63,19 @@ export function NoteModal({ isOpen, onClose, onSave, note }: NoteModalProps) {
     setTagInput("");
   }, [note, isOpen]);
 
+  const normalizeTags = (raw: string): string[] => {
+    return raw
+      .split(/[,\n]+|\s{2,}/) // split by commas, newlines, or multiple spaces
+      .map((t) => t.trim().toLowerCase())
+      .filter((t) => t.length > 0);
+  };
+
   const handleAddTag = () => {
-    const trimmedTag = tagInput.trim().toLowerCase();
-    if (trimmedTag && !tags.includes(trimmedTag)) {
-      setTags([...tags, trimmedTag]);
-      setTagInput("");
-    }
+    const candidates = normalizeTags(tagInput);
+    if (candidates.length === 0) return;
+    const merged = Array.from(new Set([...tags, ...candidates]));
+    setTags(merged);
+    setTagInput("");
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
@@ -84,9 +91,15 @@ export function NoteModal({ isOpen, onClose, onSave, note }: NoteModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() && content.trim()) {
-      onSave({ title: title.trim(), content: content.trim(), tags, color });
-    }
+    if (!title.trim() || !content.trim()) return;
+    const pending = normalizeTags(tagInput);
+    const finalTags = Array.from(new Set([...tags, ...pending]));
+    onSave({
+      title: title.trim(),
+      content: content.trim(),
+      tags: finalTags,
+      color,
+    });
   };
 
   return (

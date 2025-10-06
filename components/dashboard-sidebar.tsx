@@ -1,27 +1,37 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Home, StickyNote, User, Settings, LogOut, Menu, X } from "lucide-react"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Home,
+  StickyNote,
+  User,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 
 const navigation = [
   { name: "Home", href: "/dashboard", icon: Home },
   { name: "Notes", href: "/dashboard/notes", icon: StickyNote },
   { name: "Profile", href: "/dashboard/profile", icon: User },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
-]
+];
 
 export function DashboardSidebar() {
-  const pathname = usePathname()
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
-
-  const handleLogout = () => {
-    // TODO: Add Firebase logout logic here
-    console.log("Logout clicked")
-  }
+  const pathname = usePathname();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const router = useRouter();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  };
 
   const SidebarContent = () => (
     <>
@@ -34,7 +44,7 @@ export function DashboardSidebar() {
 
       <nav className="flex-1 px-4 py-6 space-y-1">
         {navigation.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href;
           return (
             <Link
               key={item.name}
@@ -44,13 +54,13 @@ export function DashboardSidebar() {
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                 isActive
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               )}
             >
               <item.icon className="h-5 w-5" />
               {item.name}
             </Link>
-          )
+          );
         })}
       </nav>
 
@@ -65,7 +75,7 @@ export function DashboardSidebar() {
         </Button>
       </div>
     </>
-  )
+  );
 
   return (
     <>
@@ -76,7 +86,11 @@ export function DashboardSidebar() {
         className="md:hidden fixed top-4 left-4 z-50"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
-        {isMobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        {isMobileOpen ? (
+          <X className="h-5 w-5" />
+        ) : (
+          <Menu className="h-5 w-5" />
+        )}
       </Button>
 
       {/* Mobile sidebar */}
@@ -99,5 +113,5 @@ export function DashboardSidebar() {
         <SidebarContent />
       </aside>
     </>
-  )
+  );
 }

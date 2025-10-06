@@ -143,7 +143,7 @@ export default function RegisterPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full mt-6">
               Create account
             </Button>
             <p className="text-sm text-muted-foreground text-center">

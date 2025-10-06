@@ -1,93 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { NoteCard } from "@/components/note-card";
 import { NoteModal } from "@/components/note-modal";
 
-// Mock notes data
-const mockNotes = [
-  {
-    id: "1",
-    title: "Project Ideas",
-    content:
-      "Build a notes app with React and Firebase. Add features like tags, search, and dark mode.",
-    tags: ["development", "ideas"],
-    isPinned: true,
-    color: "#FDE68A",
-    createdAt: new Date("2025-01-15"),
-    updatedAt: new Date("2025-01-15"),
-  },
-  {
-    id: "2",
-    title: "Meeting Notes",
-    content:
-      "Discussed Q1 goals and team objectives. Follow up on action items by end of week.",
-    tags: ["work", "meetings"],
-    isPinned: false,
-    color: "#BFDBFE",
-    createdAt: new Date("2025-01-14"),
-    updatedAt: new Date("2025-01-14"),
-  },
-  {
-    id: "3",
-    title: "Shopping List",
-    content: "Milk, eggs, bread, coffee, fruits, vegetables",
-    tags: ["personal"],
-    isPinned: true,
-    color: "#FCA5A5",
-    createdAt: new Date("2025-01-13"),
-    updatedAt: new Date("2025-01-14"),
-  },
-  {
-    id: "4",
-    title: "Book Recommendations",
-    content:
-      "The Pragmatic Programmer, Clean Code, Design Patterns, Refactoring",
-    tags: ["reading", "development"],
-    isPinned: false,
-    color: "#C7D2FE",
-    createdAt: new Date("2025-01-12"),
-    updatedAt: new Date("2025-01-12"),
-  },
-  {
-    id: "5",
-    title: "Workout Routine",
-    content:
-      "Monday: Chest & Triceps, Wednesday: Back & Biceps, Friday: Legs & Shoulders",
-    tags: ["fitness", "personal"],
-    isPinned: false,
-    color: "#A7F3D0",
-    createdAt: new Date("2025-01-11"),
-    updatedAt: new Date("2025-01-13"),
-  },
-  {
-    id: "6",
-    title: "Travel Plans",
-    content:
-      "Summer vacation ideas: Japan, Iceland, New Zealand. Research flights and accommodations.",
-    tags: ["travel", "personal"],
-    isPinned: false,
-    color: "#FDE68A",
-    createdAt: new Date("2025-01-10"),
-    updatedAt: new Date("2025-01-10"),
-  },
-];
+type Note = {
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  isPinned: boolean;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export default function NotesPage() {
-  const [notes, setNotes] = useState(mockNotes);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingNote, setEditingNote] = useState<(typeof mockNotes)[0] | null>(
-    null
-  );
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setLoading(true);
+    try {
+      const raw = localStorage.getItem("notes");
+      if (raw) {
+        const parsed = JSON.parse(raw) as Array<any>;
+        const mapped: Note[] = parsed.map((n) => ({
+          id: String(n.id),
+          title: n.title ?? "",
+          content: n.content ?? "",
+          tags: Array.isArray(n.tags) ? n.tags : [],
+          isPinned: Boolean(n.isPinned ?? n.is_pinned),
+          color: n.color ?? "#FDE68A",
+          createdAt: n.createdAt ? new Date(n.createdAt) : new Date(),
+          updatedAt: n.updatedAt ? new Date(n.updatedAt) : new Date(),
+        }));
+        setNotes(mapped);
+      } else {
+        setNotes([]);
+      }
+    } catch {
+      setNotes([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      const serializable = notes.map((n) => ({
+        ...n,
+        createdAt: n.createdAt.toISOString(),
+        updatedAt: n.updatedAt.toISOString(),
+      }));
+      localStorage.setItem("notes", JSON.stringify(serializable));
+    }
+  }, [notes, loading]);
 
   const handleAddNote = () => {
     setEditingNote(null);
     setIsModalOpen(true);
   };
 
-  const handleEditNote = (note: (typeof mockNotes)[0]) => {
+  const handleEditNote = (note: Note) => {
     setEditingNote(note);
     setIsModalOpen(true);
   };
@@ -98,8 +77,8 @@ export default function NotesPage() {
 
   const handleTogglePin = (id: string) => {
     setNotes(
-      notes.map((note) =>
-        note.id === id ? { ...note, isPinned: !note.isPinned } : note
+      notes.map((n) =>
+        n.id === id ? { ...n, isPinned: !n.isPinned, updatedAt: new Date() } : n
       )
     );
   };
@@ -111,20 +90,20 @@ export default function NotesPage() {
     color: string;
   }) => {
     if (editingNote) {
-      // Update existing note
-      setNotes(
-        notes.map((note) =>
-          note.id === editingNote.id
-            ? { ...note, ...noteData, updatedAt: new Date() }
-            : note
-        )
-      );
-    } else {
-      // Create new note
-      const newNote = {
-        id: Date.now().toString(),
+      const updatedLocal: Note = {
+        ...editingNote,
         ...noteData,
+        updatedAt: new Date(),
+      };
+      setNotes(notes.map((n) => (n.id === editingNote.id ? updatedLocal : n)));
+    } else {
+      const newNote: Note = {
+        id: Date.now().toString(),
+        title: noteData.title,
+        content: noteData.content,
+        tags: noteData.tags ?? [],
         isPinned: false,
+        color: noteData.color,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -148,7 +127,7 @@ export default function NotesPage() {
         </div>
       </div>
 
-      {pinnedNotes.length > 0 && (
+      {!loading && pinnedNotes.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-lg font-medium flex items-center gap-2">
             <span>Pinned Notes</span>
@@ -178,15 +157,16 @@ export default function NotesPage() {
           </span>
         </h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {unpinnedNotes.map((note) => (
-            <NoteCard
-              key={note.id}
-              note={note}
-              onEdit={handleEditNote}
-              onDelete={handleDeleteNote}
-              onTogglePin={handleTogglePin}
-            />
-          ))}
+          {!loading &&
+            unpinnedNotes.map((note) => (
+              <NoteCard
+                key={note.id}
+                note={note}
+                onEdit={handleEditNote}
+                onDelete={handleDeleteNote}
+                onTogglePin={handleTogglePin}
+              />
+            ))}
         </div>
       </div>
 

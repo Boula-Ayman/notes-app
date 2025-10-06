@@ -80,7 +80,7 @@ export default function ProfilePage() {
         <CardContent>
           {error && <p className="text-sm text-destructive mb-3">{error}</p>}
           <div className="flex items-center space-x-4">
-            <Avatar>
+            <Avatar className="ml-1 mb-1">
               <AvatarImage
                 src="https://i.pravatar.cc/150?u=a0480af53835adec"
                 alt="avatar"
@@ -90,7 +90,7 @@ export default function ProfilePage() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <Label>Name</Label>
+              <Label>Name:</Label>
               {isEditing ? (
                 <Input
                   value={name}
@@ -104,9 +104,9 @@ export default function ProfilePage() {
           </div>
           <Separator />
           <div className="flex items-center space-x-4">
-            <Mail />
-            <div>
-              <Label>Email</Label>
+            <Mail className="ml-1" />
+            <div className="ml-2 mt-3">
+              <Label className="mb-1 ">Email:</Label>
               {isEditing ? (
                 <Input value={email} disabled />
               ) : (
