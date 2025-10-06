@@ -71,7 +71,15 @@ export default function RegisterPage() {
         }
       }
     } catch (err) {
-      setError("Network error. Please check your connection and try again.");
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      if (!url || !key) {
+        setError(
+          "Supabase keys are missing in production. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY."
+        );
+      } else {
+        setError("Network error. Please check your connection and try again.");
+      }
     }
   };
 
