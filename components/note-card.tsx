@@ -42,10 +42,13 @@ export function NoteCard({
   onTogglePin,
 }: NoteCardProps) {
   return (
-    <Card
-      className="border-border/50 hover:border-border transition-colors group"
-      style={{ backgroundColor: note.color || undefined }}
-    >
+    <Card className="border-border/50 hover:border-border transition-colors group relative overflow-hidden">
+      {/* Left color stripe */}
+      <div
+        aria-hidden
+        className="absolute left-0 top-0 h-full"
+        style={{ width: 6, backgroundColor: note.color || "#FDE68A" }}
+      />
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-lg text-balance line-clamp-1 text-black">
