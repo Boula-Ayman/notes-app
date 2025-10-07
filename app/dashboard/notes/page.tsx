@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import { NoteCard } from "@/components/note-card";
 import { NoteModal } from "@/components/note-modal";
@@ -23,6 +24,7 @@ export default function NotesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -114,17 +116,38 @@ export default function NotesPage() {
     setEditingNote(null);
   };
 
-  const pinnedNotes = notes.filter((note) => note.isPinned);
-  const unpinnedNotes = notes.filter((note) => !note.isPinned);
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+  const filtered = normalizedQuery
+    ? notes.filter((n) => {
+        const inTitle = n.title.toLowerCase().includes(normalizedQuery);
+        const inContent = n.content.toLowerCase().includes(normalizedQuery);
+        const inTags = (n.tags || [])
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedQuery);
+        return inTitle || inContent || inTags;
+      })
+    : notes;
+
+  const pinnedNotes = filtered.filter((note) => note.isPinned);
+  const unpinnedNotes = filtered.filter((note) => !note.isPinned);
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-3xl font-semibold text-balance">My Notes</h1>
           <p className="text-muted-foreground mt-2">
             Manage and organize your thoughts
           </p>
+        </div>
+        <div className="w-full sm:w-auto sm:min-w-64">
+          <Input
+            placeholder="Search title, content, or tags..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-secondary/50"
+          />
         </div>
       </div>
 
@@ -157,17 +180,23 @@ export default function NotesPage() {
             ({unpinnedNotes.length})
           </span>
         </h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {unpinnedNotes.map((note) => (
-            <NoteCard
-              key={note.id}
-              note={note}
-              onEdit={handleEditNote}
-              onDelete={handleDeleteNote}
-              onTogglePin={handleTogglePin}
-            />
-          ))}
-        </div>
+        {unpinnedNotes.length === 0 && pinnedNotes.length === 0 && !loading ? (
+          <p className="text-sm text-muted-foreground">
+            No notes match your search.
+          </p>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {unpinnedNotes.map((note) => (
+              <NoteCard
+                key={note.id}
+                note={note}
+                onEdit={handleEditNote}
+                onDelete={handleDeleteNote}
+                onTogglePin={handleTogglePin}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Floating Add Button */}

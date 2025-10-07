@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -12,14 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Search, Moon, Sun, User, Settings, LogOut } from "lucide-react";
+import { Moon, Sun, User, Settings, LogOut } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export function DashboardNavbar() {
   const { theme, setTheme } = useTheme();
-  const [searchQuery, setSearchQuery] = useState("");
   const [displayName, setDisplayName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const router = useRouter();
@@ -53,19 +51,7 @@ export function DashboardNavbar() {
   return (
     <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
       <div className="flex items-center gap-4 px-6 py-4">
-        {/* Search bar */}
-        <div className="flex-1 max-w-md">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search notes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-secondary/50"
-            />
-          </div>
-        </div>
+        <div className="flex-1" />
 
         {/* Right side actions */}
         <div className="flex items-center gap-2">
