@@ -137,7 +137,7 @@ export function NoteModal({ isOpen, onClose, onSave, note }: NoteModalProps) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="color">Color</Label>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 overflow-x-hidden">
                 <input
                   id="color"
                   type="color"
@@ -145,7 +145,7 @@ export function NoteModal({ isOpen, onClose, onSave, note }: NoteModalProps) {
                   onChange={(e) => setColor(e.target.value)}
                   className="h-9 w-14 p-1 rounded-md border border-border/50 bg-secondary/50 cursor-pointer"
                 />
-                <div className="flex gap-2 items-center">
+                <div className="flex flex-wrap gap-2 items-center">
                   {[
                     "#FDE68A", // yellow
                     "#BFDBFE", // blue-200

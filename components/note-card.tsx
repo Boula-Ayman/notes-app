@@ -57,9 +57,9 @@ export function NoteCard({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="h-8 w-8 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity text-black hover:text-black"
             >
-              <MoreVertical className="h-4 w-4" />
+              <MoreVertical className="h-4 w-4 text-black" />
               <span className="sr-only">Open menu</span>
             </Button>
           </DropdownMenuTrigger>

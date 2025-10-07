@@ -23,6 +23,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const router = useRouter();
 
@@ -56,6 +57,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     // Validation
     if (!email || !password) {
@@ -92,6 +94,7 @@ export default function LoginPage() {
         setError("Network error. Please check your connection and try again.");
       }
     }
+    setIsLoading(false);
   };
 
   return (
@@ -153,8 +156,34 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full mt-6">
-              Sign in
+            <Button type="submit" className="w-full mt-6" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Signing in...
+                </>
+              ) : (
+                "Sign in"
+              )}
             </Button>
             <p className="text-sm text-muted-foreground text-center">
               Don't have an account?{" "}

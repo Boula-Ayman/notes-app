@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { NoteCard } from "@/components/note-card";
 import { NoteModal } from "@/components/note-modal";
+import { FloatingMascot } from "@/components/floating-mascot";
 
 type Note = {
   id: string;
@@ -178,6 +179,13 @@ export default function NotesPage() {
         <Plus className="h-6 w-6" />
         <span className="sr-only">Add note</span>
       </Button>
+
+      {/* Floating Mascot - using provided Tenor GIF on left side */}
+      <FloatingMascot
+        className="pointer-events-none"
+        side="left"
+        imageSrc="https://media.tenor.com/zXhK-0R9y1gAAAAi/vengeful-notes.gif"
+      />
 
       {/* Note Modal */}
       <NoteModal
