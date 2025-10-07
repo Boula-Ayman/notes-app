@@ -4,10 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Light theme - clean whites and grays */
-  --background: oklch(1 0 0);
+  /* Light theme - off-white background */
+  --background: oklch(0.8 0 0);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: rgba(255, 255, 255, 0.5);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
@@ -41,10 +41,10 @@
 }
 
 .dark {
-  /* Dark theme - deep blacks with teal accents */
-  --background: oklch(0.145 0 0);
+  /* Dark theme - gray background */
+  --background: oklch(0.25 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
+  --card: rgba(20, 20, 20, 0.5);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -121,6 +121,21 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: linear-gradient(45deg, #37353e, #44444e, #715a5a, #251e1a);
+    background-size: 400% 400%;
+    animation: gradientShift 5s ease infinite;
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
