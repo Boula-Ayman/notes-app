@@ -7,8 +7,8 @@ import Lottie from "lottie-react";
 type FloatingMascotProps = {
   className?: string;
   size?: number;
-  jsonUrl?: string; // Optional remote Lottie JSON
-  imageSrc?: string; // Static PNG/GIF alternative (e.g. "/anime.gif")
+  jsonUrl?: string;
+  imageSrc?: string;
   side?: "left" | "right"; // Where to pin horizontally
 };
 
@@ -32,7 +32,7 @@ export function FloatingMascot({
         const json = await res.json();
         if (mounted) setAnimationData(json);
       } catch {
-        // Ignore load errors; just hide mascot
+        // Ignore load errors just hide mascot
         if (mounted) setVisible(false);
       }
     };
