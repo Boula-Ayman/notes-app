@@ -1,43 +1,45 @@
-## Notes — Next.js App
+## Notes App (Next.js + Supabase)
 
-A minimal notes dashboard built with Next.js 15, React 18, Tailwind CSS, and Supabase authentication. Includes a dashboard, notes CRUD UI, and a simple profile/settings area.
+A simple, modern notes app with authentication, a dashboard, and client-side note management. Great for a quick demo or internship showcase and easy to extend to a full backend.
 
 ### Features
 
-- Authentication (Supabase)
-- Notes list and create/edit via modal
-- Responsive dashboard layout with sidebar and navbar
-- Dark mode via `next-themes`
+- Authentication with Supabase (register, login, resend confirmation)
+- Notes CRUD in the browser (localStorage)
+- Pin/unpin notes and quick counts
+- Clean UI with reusable components
+- Loading states on auth for good UX
+- Search/filter by title, content, tags on the Notes page
+- Optional floating mascot (GIF/Lottie) bottom-left
 
 ### Tech Stack
 
-- Next.js 15 (App Router)
-- React 18
-- Tailwind CSS 4
-- Supabase (`@supabase/supabase-js`)
+- Next.js App Router, React, TypeScript
+- Supabase auth via `@supabase/ssr`
+- Tailwind-based UI components
 
 ### Getting Started
 
-1. Install dependencies:
+1. Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Create `.env.local` with your Supabase keys:
+2. Environment variables (create `.env.local`)
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-3. Run the dev server:
+3. Run the app
 
 ```bash
 npm run dev
 ```
 
-4. Visit `http://localhost:3000`.
+App runs at `http://localhost:3000`.
 
 ### Scripts
 
@@ -48,11 +50,37 @@ npm run dev
 
 ### Project Structure
 
-- `app/` — routes and pages (App Router)
-- `components/` — UI components (navbar, sidebar, note modal, etc.)
-- `lib/` — utilities and Supabase client
-- `public/` — static assets
+```
+app/
+  login/, register/        # Auth pages
+  dashboard/               # Authenticated area
+    notes/                 # Notes page (create, edit, pin, delete)
+components/
+  note-card.tsx            # Single note UI
+  note-modal.tsx           # Create/Edit dialog
+  floating-mascot.tsx      # Optional animated character
+lib/
+  supabaseClient.ts        # Supabase browser client
+public/
+  ... assets
+```
+
+### How Notes Work
+
+- Notes are stored in `localStorage` for quick demos (no server DB).
+- On load, notes are read and mapped to a typed model; on change they are serialized back.
+- Easy to migrate to a real database later (e.g., Supabase/Postgres).
+
+### Customization Tips
+
+- Mascot: drop a GIF/PNG in `public` and set `imageSrc` on `FloatingMascot`.
+- Lottie animations: pass a `jsonUrl` (uses `lottie-react`).
+- Search: built into Notes page (filters title, content, tags).
 
 ### Deployment
 
-Deploy easily to Vercel. Ensure environment variables are configured in the hosting platform.
+Deploy to Vercel; configure the same env vars in project settings.
+
+### License
+
+For personal/educational use. Check third-party assets (icons, GIFs, Lottie) for their licenses before commercial use.
