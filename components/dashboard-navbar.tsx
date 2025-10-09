@@ -15,6 +15,8 @@ import { Moon, Sun, User, Settings, LogOut } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { Command } from "lucide-react";
+import { CommandPalette } from "@/components/command-palette";
 
 export function DashboardNavbar() {
   const { theme, setTheme } = useTheme();
@@ -51,7 +53,28 @@ export function DashboardNavbar() {
   return (
     <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm">
       <div className="flex items-center gap-4 px-6 py-4">
-        <div className="flex-1" />
+        <div className="flex-1">
+          <Button
+            variant="outline"
+            className="gap-2 hidden md:inline-flex"
+            onClick={() => {
+              try {
+                const el = document.querySelector(
+                  '[data-slot="dialog-content"]'
+                );
+                if (!el) {
+                  // open by sending a custom event to the palette component
+                  window.dispatchEvent(
+                    new CustomEvent("toggle-command-palette")
+                  );
+                }
+              } catch {}
+            }}
+          >
+            <Command className="h-4 w-4" />
+            <span className="text-muted-foreground">Search (Ctrl/⌘ + K)</span>
+          </Button>
+        </div>
 
         {/* Right side actions */}
         <div className="flex items-center gap-2">
@@ -116,6 +139,7 @@ export function DashboardNavbar() {
           </DropdownMenu>
         </div>
       </div>
+      <CommandPalette />
     </header>
   );
 }

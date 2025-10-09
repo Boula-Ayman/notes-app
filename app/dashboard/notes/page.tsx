@@ -27,6 +27,13 @@ export default function NotesPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
+    const onOpen = () => setIsModalOpen(true);
+    window.addEventListener("open-note-modal", onOpen as EventListener);
+    return () =>
+      window.removeEventListener("open-note-modal", onOpen as EventListener);
+  }, []);
+
+  useEffect(() => {
     setLoading(true);
     try {
       const raw = localStorage.getItem("notes");

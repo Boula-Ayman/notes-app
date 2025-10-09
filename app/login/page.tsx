@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StickyNote } from "lucide-react";
+import { AuroraBackground } from "@/components/aurora-background";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 
 export default function LoginPage() {
@@ -98,8 +99,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md border-border/50 shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
+      <AuroraBackground />
+      <Card className="w-full max-w-md border-border/50 shadow-lg relative z-10">
         <CardHeader className="space-y-3 text-center">
           <div className="flex justify-center mb-2">
             <div className="p-3 rounded-lg bg-primary/10">
