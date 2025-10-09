@@ -119,7 +119,18 @@ export default function LoginPage() {
           <CardContent className="space-y-4">
             {error && (
               <div className="p-3 rounded-md bg-destructive/10 border border-destructive/20">
-                <p className="text-sm text-destructive">{error}</p>
+                <p
+                  className={
+                    "text-sm " +
+                    (error.includes(
+                      "Please confirm your email before logging in."
+                    )
+                      ? "text-red-500"
+                      : "text-destructive")
+                  }
+                >
+                  {error}
+                </p>
                 {error.includes("confirm your email") && (
                   <Button
                     type="button"
