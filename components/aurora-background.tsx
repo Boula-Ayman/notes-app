@@ -72,19 +72,19 @@ export function AuroraBackground({ className }: AuroraBackgroundProps) {
               rgba(255, 255, 255, 0.28) 30%,
               rgba(255, 255, 255, 0) 60%
             );
-          animation: cloudDrift 39s linear infinite;
+          animation: cloudDrift 38s linear infinite;
         }
         .cloud-1 {
           top: 18%;
         }
         .cloud-2 {
           top: 36%;
-          animation-duration: 51s;
+          animation-duration: 50s;
           opacity: 0.28;
         }
         .cloud-3 {
           top: 54%;
-          animation-duration: 59s;
+          animation-duration: 58s;
           opacity: 0.22;
         }
 
